@@ -1,5 +1,5 @@
 package sagrModa;
-public class Estudiante {
+public class Prenda {
     ///ATRIBUTOS
     private String codigo;
     private String nombre;
@@ -7,13 +7,13 @@ public class Estudiante {
     private float nota;
     
     ////Constructores.
-    public Estudiante() {
+    public Prenda() {
         this.codigo="";
         this.nombre="";
         this.genero='*';
         this.nota=0;
     }
-    public Estudiante(String codigo,String nombre,char genero,float f) {
+    public Prenda(String codigo,String nombre,char genero,float f) {
         this.codigo=codigo;
         this.nombre=nombre;
         this.genero=genero;
@@ -22,7 +22,7 @@ public class Estudiante {
     ///MODIFICADORES
     ///UNO POR CADA ATRIBUTO
 
-    public Estudiante(String cod, String nom, String gen, float note) {
+    public Prenda(String cod, String nom, String gen, float note) {
     }
     public void setCodigo(String codigo) {
         this.codigo = codigo;

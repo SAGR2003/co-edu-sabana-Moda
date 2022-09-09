@@ -14,7 +14,7 @@ public class ManagePrend{
     ///Variable de clase
     private String ruta;
 
-    public managePrend()
+    public ManagePrend()
     {
         this.ruta="./Archivos/misPrendas.txt";
         this.verificArchivo ();

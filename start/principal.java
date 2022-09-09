@@ -4,13 +4,13 @@ import javax.swing.*;
 
 public class principal {
     ///Variable de clase
-    private managePrend gestor;
+    private ManagePrend gestor;
     public static void main(String[] x) {
         new principal();
     }
     public principal()
     {
-        this.gestor=new managePrend();
+        this.gestor=new ManagePrend();
         this.menu(); 
     }
     private void menu() 
