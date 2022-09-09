@@ -2,15 +2,15 @@ package sagrModa;
 
 import javax.swing.*;
 
-public class Entrada {
+public class principal {
     ///Variable de clase
-    private GestionEstudiantes gestor;
+    private managePrend gestor;
     public static void main(String[] x) {
-        new Entrada();
+        new principal();
     }
-    public Entrada()
+    public principal()
     {
-        this.gestor=new GestionEstudiantes();
+        this.gestor=new managePrend();
         this.menu(); 
     }
     private void menu() 
@@ -19,8 +19,8 @@ public class Entrada {
         String inicio;
         do {
             inicio=JOptionPane.showInputDialog("=====OPCIONES===== \n" + 
-                                    "1. Agregar estudiante \n" +
-                                    "2. Buscar Estudiante \n" +
+                                    "1. Agregar prenda \n" +
+                                    "2. Buscar prenda \n" +
                                     "3. Ver todos los estudiantes \n" +
                                     "4. Modificar atributos \n" +
                                     "5. Eliminar estudiante\n" +
@@ -28,7 +28,7 @@ public class Entrada {
             opcion=(char)Integer.parseInt(inicio);
             switch (opcion) {
                 case 1:
-                    this.gestor.nuevoEstudiante();
+                    this.gestor.nuevaPrenda();
                 break;
                 case 2:
                     if (this.gestor.hayEstudiantes())

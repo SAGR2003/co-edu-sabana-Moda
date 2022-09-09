@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 
-public class GestionEstudiantes{
+public class ManagePrend{
     ///Variable de clase
     private String ruta;
 
-    public GestionEstudiantes()
+    public managePrend()
     {
-        this.ruta="./Archivos/misEstudiantes.txt";
+        this.ruta="./Archivos/misPrendas.txt";
         this.verificArchivo ();
     }
 
@@ -32,11 +32,13 @@ public class GestionEstudiantes{
         }
     }
 
-    public void nuevoEstudiante(){
+    public void nuevaPrenda(){
         String cod;
         String nom;
-        char gen;
-        float note;
+        float costoFab;
+        float precioV;
+        String categoria;
+
         boolean esta;
 
         do{
@@ -48,45 +50,30 @@ public class GestionEstudiantes{
         }while (esta);
 
         nom=JOptionPane.showInputDialog("Digite nombre:");
-        gen=Character.toUpperCase(JOptionPane.showInputDialog("Digite genero:").charAt(0));
-        switch(gen){
-            case 'M':
-                JOptionPane.showMessageDialog(null, "El genero se guardo como: masculino");
-            break;
-            case 'F':
-                JOptionPane.showMessageDialog(null, "El genero se guardo como: femenino");
-            break;
-            case 'O':
-                JOptionPane.showMessageDialog(null, "El genero se guardo como: otro");
-            break;
-            default:
-                while(gen!='M'|| gen!='F'|| gen!='O'){
-                    JOptionPane.showMessageDialog(null, "Genero no valido!! recuerde: Masculino, Femenino, Otro");
-                    gen=Character.toUpperCase(JOptionPane.showInputDialog("Digite genero:").charAt(0));
-                    if(gen=='M'|| gen=='F'|| gen=='O') break;
-                }
-            break;
+        
+        costoFab=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de fabricacion:"));
+        
+        precioV=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de ventas:"));
+        while(precioV<costoFab){
+            JOptionPane.showMessageDialog(null, "Costo no valido!! recuerde: El costo de ventas no puede ser mayor al costo de produccion");
+            precioV=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de ventas nuevamente:"));
         }
-        note=Float.parseFloat(JOptionPane.showInputDialog("Digite nota:"));
-        while(note<0 || note>5){
-            JOptionPane.showMessageDialog(null, "Nota no valida!! recuerde: NO valores negativos ni mayores de 5");
-            note=Float.parseFloat(JOptionPane.showInputDialog("Digite la nota nuevamente:"));
-        }
-        Estudiante student=new Estudiante(cod,nom,gen,note);
-        this.guardaEstudiante(student);
+        categoria=JOptionPane.showInputDialog("Digite categoria:");
+        Prenda prend=new Prenda(cod,nom,costoFab,precioV,categoria);
+        this.guardaPrenda(prend);
     }
 
-    private void guardaEstudiante(Estudiante student){
+    private void guardaPrenda(Prenda prend){
         try{
             File file=new File(this.ruta);
             FileWriter fr=new FileWriter(file, true);
             PrintWriter pw=new PrintWriter(fr);
-                pw.println(student);
+                pw.println(prend);
             pw.close();
             JOptionPane.showMessageDialog(null, "La operacion ha sido exitosa!!!");
         }
         catch(IOException xxx){
-            JOptionPane.showMessageDialog(null, "No se pudo guardar el estudiante!!!");
+            JOptionPane.showMessageDialog(null, "No se pudo guardar la prenda!!!");
         }
     }
 
