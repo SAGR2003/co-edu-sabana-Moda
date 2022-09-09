@@ -1,3 +1,5 @@
+package sagrModa;
+
 import javax.swing.*;
 
 public class Entrada {

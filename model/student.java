@@ -1,4 +1,4 @@
-package co/edu/sabana/modificar
+package sagrModa;
 public class Estudiante {
     ///ATRIBUTOS
     private String codigo;

@@ -1,3 +1,5 @@
+package sagrModa;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,10 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-/**
-*
-* @author Sergio
-*/
+
 public class GestionEstudiantes{
     ///Variable de clase
     private String ruta;
