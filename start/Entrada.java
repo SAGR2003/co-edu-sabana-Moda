@@ -22,7 +22,7 @@ public class principal {
                                     "1. Agregar prenda \n" +
                                     "2. Buscar prenda \n" +
                                     "3. Ver todos los estudiantes \n" +
-                                    "4. Modificar atributos \n" +
+                                    "4. Modificar prenda \n" +
                                     "5. Eliminar estudiante\n" +
                                     "0. SALIDA \n");
             opcion=(char)Integer.parseInt(inicio);
@@ -49,12 +49,12 @@ public class principal {
                     }
                 break;
                 case 4:
-                    if (this.gestor.hayEstudiantes())
+                    if (this.gestor.hayPrenda())
                     {
                         this.menuModificadores();
                     }else
                     {
-                        JOptionPane.showMessageDialog(null, "Aún no hay estudiantes");
+                        JOptionPane.showMessageDialog(null, "Aún no hay prendas");
                     }
                 break;
                 case 5:
@@ -83,8 +83,9 @@ public class principal {
             inicio=JOptionPane.showInputDialog("=====OPCIONES===== \n" + 
                                       "1. Modificar código \n" +
                                       "2. Modificar nombre \n" +
-                                      "3. Modificar Genero \n" +
-                                      "4. Modificar Nota \n" +
+                                      "3. Modificar costo de fabrica \n" +
+                                      "4. Modificar pecio de venta \n" +
+                                      "5. Modificar categoria \n" +
                                       "0. ATRAS \n");
             opcion=(char) Integer.parseInt(inicio);
             switch (opcion) {
@@ -95,10 +96,13 @@ public class principal {
                     this.gestor.modifyNombre();
                 break;
                 case 3:
-                    this.gestor.modifyGenero();
+                    this.gestor.modifyCostoFabrica();
                 break;
                 case 4:
-                    this.gestor.modifyNota();
+                    this.gestor.modifyPrecioVenta();
+                break;
+                case 5:
+                    this.gestor.modifyCategoria();
                 break;
                 case 0:
                     JOptionPane.showMessageDialog(null,"Lo devolveremos al menú principal...");
