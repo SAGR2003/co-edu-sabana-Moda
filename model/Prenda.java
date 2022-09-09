@@ -1,65 +1,321 @@
 package sagrModa;
-public class Prenda {
-    ///ATRIBUTOS
-    private String codigo;
-    private String nombre;
-    private char genero;
-    private float nota;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+
+public class ManagePrend{
+    ///Variable de clase
+    private String ruta;
+
+    public managePrend()
+    {
+        this.ruta="./Archivos/misPrendas.txt";
+        this.verificArchivo ();
+    }
+
+    private void verificArchivo(){
+        try{
+            File filex=new File (this.ruta);
+            if(!filex.exists()){       //si no existe el archivo 
+                filex.createNewFile(); //lo crea
+            }
+        }
+        catch (IOException ex){
+            System.out.println("Problemas con la ruta...!!");
+        }
+    }
+
+    public void nuevaPrenda(){
+        String cod;
+        String nom;
+        float costoFab;
+        float precioV;
+        String categoria;
+
+        boolean esta;
+
+        do{
+            cod=JOptionPane.showInputDialog("Digite código:");
+            esta=this.existeCodigo(cod);
+            if(esta){
+                JOptionPane.showMessageDialog(null, "El código ya existe!!! por favor digite otro código");
+            }
+        }while (esta);
+
+        nom=JOptionPane.showInputDialog("Digite nombre:");
+        
+        costoFab=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de fabricacion:"));
+        
+        precioV=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de ventas:"));
+        while(precioV<costoFab){
+            JOptionPane.showMessageDialog(null, "Costo no valido!! recuerde: El costo de ventas no puede ser mayor al costo de produccion");
+            precioV=Float.parseFloat(JOptionPane.showInputDialog("Digite costo de ventas nuevamente:"));
+        }
+        categoria=JOptionPane.showInputDialog("Digite categoria:");
+        Prenda prend=new Prenda(cod,nom,costoFab,precioV,categoria);
+        this.guardaPrenda(prend);
+    }
+
+    private void guardaPrenda(Prenda prend){
+        try{
+            File file=new File(this.ruta);
+            FileWriter fr=new FileWriter(file, true);
+            PrintWriter pw=new PrintWriter(fr);
+                pw.println(prend);
+            pw.close();
+            JOptionPane.showMessageDialog(null, "La operacion ha sido exitosa!!!");
+        }
+        catch(IOException xxx){
+            JOptionPane.showMessageDialog(null, "No se pudo guardar la prenda!!!");
+        }
+    }
+
+    public void verEstudiante (){
+        String code;
+        code=JOptionPane.showInputDialog("Digite el código que desea buscar:");
+        Estudiante stud=this.buscaEstudiante(code);
+
+        if(stud!=null){
+            System.out.println(stud);
+            System.out.println("=================================");
+        }else{
+            JOptionPane.showMessageDialog(null, "El código no existe!!");
+        }
+    }
     
-    ////Constructores.
-    public Prenda() {
-        this.codigo="";
-        this.nombre="";
-        this.genero='*';
-        this.nota=0;
-    }
-    public Prenda(String codigo,String nombre,char genero,float f) {
-        this.codigo=codigo;
-        this.nombre=nombre;
-        this.genero=genero;
-        this.nota=f;
-    }
-    ///MODIFICADORES
-    ///UNO POR CADA ATRIBUTO
+    private Estudiante buscaEstudiante(String code){
+        FileReader file;
+        BufferedReader br;
+        String registro;
+        Estudiante stud=null;
 
-    public Prenda(String cod, String nom, String gen, float note) {
+        try{
+            file=new FileReader(this.ruta);
+            br=new BufferedReader(file);
+            while((registro=br.readLine())!=null){
+                String[] campos=registro.split(",");
+                if(campos[0].equals(code)){
+                    stud=new Estudiante(campos[0], campos[1],campos[2].charAt(0),Float.parseFloat(campos[3]));
+                    break;
+                }
+            }
+        }catch(IOException ex){
+            System.out.println("Fallo buscando estudiante!!!");
+        }
+        return stud;
     }
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
+    
+    public ArrayList<Estudiante> getEstudiantes(){
+        FileReader file;
+        BufferedReader br;
+        String registro;
+        Estudiante stud=null;
+        ArrayList<Estudiante> students=new ArrayList<>();
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setGenero(char genero) {
-        this.genero = genero;
-    }
-
-    public void setNota(float nota) {
-        this.nota = nota;
-    }
-    ///ANALIZADORES
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public char getGenero() {
-        return genero;
+        try{
+            file=new FileReader(this.ruta);
+            br=new BufferedReader(file);
+            while((registro=br.readLine())!=null){
+                String[] campos=registro.split(",");
+                stud=new Estudiante(campos[0], campos[1],campos[2].charAt(0),Float.parseFloat(campos[3]));
+                students.add(stud);
+            }
+        }catch(IOException ex){
+            System.out.println("Fallo buscando estudiante!!!");
+        }
+        return students;
     }
 
-    public float getNota() {
-        return nota;
+    public void verTodos() {
+        
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        for (Estudiante stud : students){
+            System.out.println(stud);
+        }
+        System.out.println("=================================");
     }
 
-    @Override
-    public String toString() {
-        return this.codigo +"," +this.nombre+","+this.genero+","+this.nota;
+    public void modifyCodigo() {
+        String code,newDato;
+        boolean existe=false;
+        ArrayList<Estudiante> studes=this.getEstudiantes();
+
+        code=JOptionPane.showInputDialog("Digite el código que desea modificar:");
+        for (Estudiante stud : studes){
+            if(stud.getCodigo().equals(code)){
+                do{
+                    newDato=JOptionPane.showInputDialog("Digite el nuevo dato");
+                    existe=this.existeCodigo(newDato);
+                    if(existe)
+                        JOptionPane.showMessageDialog(null, "El código ya existe!!! por favor digite otro código");
+                }while(existe);
+                
+                stud.setCodigo(newDato);
+                this.reemplazArchivo(studes);          
+                JOptionPane.showMessageDialog(null, "El código se modifico correctamente!!!");
+                existe=true;
+                break;
+            }
+        }
+        if (!existe)
+            JOptionPane.showMessageDialog(null, "El código no existe");
+    }
+
+    public void modifyNombre() {
+       
+        String code,newDato;
+        boolean existe=false;
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        code=JOptionPane.showInputDialog("Digite el código del estudiante que desea modificarle el nombre:");
+        for (Estudiante stud : students){
+            if(stud.getCodigo().equals(code)){
+                newDato=JOptionPane.showInputDialog("Digite el nuevo nombre");
+                stud.setNombre(newDato);
+                this.reemplazArchivo(students);
+                JOptionPane.showMessageDialog(null, "El nombre se modifico correctamente!!!");
+                existe=true;
+                break;
+            }
+        }
+        if (!existe)
+            JOptionPane.showMessageDialog(null, "El código no existe");
+    }
+    
+    public void modifyGenero() {
+        String code;
+        char newDato;
+        boolean existe=false;
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        code=JOptionPane.showInputDialog("Digite el código del estudiante que desea modificarle el genero:");
+        for (Estudiante stud : students){
+            if(stud.getCodigo().equals(code)){
+                newDato=Character.toUpperCase(JOptionPane.showInputDialog("Digite el nuevo genero").charAt(0));
+                switch(newDato){
+                    case 'M':
+                        JOptionPane.showMessageDialog(null, "El genero se guardo como: masculino");
+                    break;
+                    case 'F':
+                        JOptionPane.showMessageDialog(null, "El genero se guardo como: femenino");
+                    break;
+                    case 'O':
+                        JOptionPane.showMessageDialog(null, "El genero se guardo como: otro");
+                    break;
+                    default:
+                        while(newDato!='M'|| newDato!='F'|| newDato!='O'){
+                            JOptionPane.showMessageDialog(null, "Genero no valido!! recuerde: Masculino, Femenino, Otro");
+                            newDato=Character.toUpperCase(JOptionPane.showInputDialog("Digite el nuevo genero:").charAt(0));
+                            if(newDato=='M'|| newDato=='F'|| newDato=='O') break;
+                        }
+                    break;
+                }
+                stud.setGenero(newDato);
+                this.reemplazArchivo(students);
+                JOptionPane.showMessageDialog(null, "El genero se modifico correctamente!!!");
+                existe=true;
+                break;
+            }
+        }
+        if (!existe) 
+            JOptionPane.showMessageDialog(null, "El código no existe");
+        
+    }
+
+    public void modifyNota() {
+        String code;
+        float newDato;
+        boolean existe=false;
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        code=JOptionPane.showInputDialog("Digite el código del estudiante que desea modificarle la nota:");
+        for (Estudiante stud : students){
+            if(stud.getCodigo().equals(code)){
+                newDato=Float.parseFloat(JOptionPane.showInputDialog("Digite la nueva nota"));
+                while(newDato<0 || newDato>5){
+                    JOptionPane.showMessageDialog(null, "Nota no valida!! recuerde: NO valores negativos ni mayores de 5");
+                    newDato=Float.parseFloat(JOptionPane.showInputDialog("Digite la nota nuevamente:"));
+                }
+                stud.setNota(newDato);
+                this.reemplazArchivo(students);
+                existe=true;
+                break;
+            }
+        }
+        if (!existe) 
+            JOptionPane.showMessageDialog(null, "El código no existe");
+    }
+
+    public void eliminarEstudiante() {
+        String code;
+        boolean existe=false;
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        code=JOptionPane.showInputDialog("Digite el código del estudiante que desea eliminar:");
+        for (Estudiante stud : students){
+            if(stud.getCodigo().equals(code)){
+                students.remove(stud);
+                this.reemplazArchivo(students);
+                JOptionPane.showMessageDialog(null, "Se ha eliminado del registro el estudiante de código: "+code);
+                existe=true;
+                break;
+            }
+        }
+        if (!existe)
+            JOptionPane.showMessageDialog(null, "El código no existe");       
+    }
+
+    private void reemplazArchivo(ArrayList<Estudiante> students){
+        try{
+            File file=new File(ruta);
+            FileWriter fr=new FileWriter(file, false);
+            PrintWriter ps=new PrintWriter(fr);
+            for(Estudiante elstudent:students)
+                ps.println(elstudent);
+            ps.close();
+        }catch (IOException cosito){
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar el estudiante...!!!");
+        }
+    }
+
+    private boolean existeCodigo(String code){
+        boolean existe=false;
+        ArrayList<Estudiante> students=this.getEstudiantes();
+
+        for (Estudiante stud : students){
+            if(stud.getCodigo().equals(code)){                
+                existe=true;
+                break;
+            }
+        }
+        return existe;
+    }
+
+    public boolean hayPrenda(){
+        
+        FileReader file;
+        BufferedReader br;
+        String registro;
+        boolean hay=false;
+
+        try{
+            file=new FileReader(this.ruta);
+            br=new BufferedReader(file);
+            while((registro=br.readLine())!=null){
+                hay=true;
+                break;
+            }
+        }catch(IOException ex){
+            System.out.println("Fallo buscando prenda!!!");
+        }
+        return hay;
     }
 }
-
