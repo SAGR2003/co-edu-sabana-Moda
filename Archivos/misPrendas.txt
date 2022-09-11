@@ -1,0 +1,4 @@
+1,camisa,4000.0,6000.0,Verano
+2,pantaloneta,2000.0,3000.0,Verano
+3,pantalon,3000.0,5000.0,Invierno
+4,chaqueta,6000.0,8000.0,Invierno
